@@ -1,5 +1,5 @@
-var WIDTH = 800, HEIGHT = 400;
-var SIZE = 50;
+var WIDTH = 1200, HEIGHT = 600;
+var SIZE = 10;
 var grid;
 
 function setup() {

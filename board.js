@@ -46,7 +46,9 @@ board.prototype.genMaze = function() {
   this.createRoute(createVector(1, Math.round(random((HEIGHT / SIZE) - 3) + 1)));
   var cells_drawable = [0];
 
-  while (cells_drawable.length > 0) {
+  var max_it = (this.WIDTH * this.HEIGHT) / (3 * this.s);
+  var it = 0;
+  while (true) {
     cells_drawable = [];
     var temp = [];
     //we look for cell drawable
@@ -80,6 +82,9 @@ board.prototype.genMaze = function() {
         this.createRoute(createVector(chosen.x, chosen.y));
       }
 
+      if (it >= max_it)
+        break;
+      it++;
   }
 }
 
@@ -135,8 +140,11 @@ board.prototype.createRoute = function(pos) {
 
     }
 
+    this.cells[Apos.x][Apos.y].wall = false;
+
   }
       //to see the last cell
-      this.cells[Apos.x][Apos.y].actual = true;
+      //this.cells[Apos.x][Apos.y].actual = true;
+      this.cells[Apos.x][Apos.y].wall = false;
 
 }
