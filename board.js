@@ -3,6 +3,10 @@ function board(width_, height_, size_) {
   this.WIDTH = width_;
   this.HEIGHT = height_;
   this.s = size_;
+  this.step = 0;
+  this.load_indicator = "0 / 0";
+  this.texte_ = createElement('p', this.load_indicator);
+  this.max_it = 0;
 
  console.log(Math.round(this.WIDTH / this.s));
   this.cells = new Array(Math.round(this.WIDTH / this.s));
@@ -26,6 +30,19 @@ board.prototype.draw = function() {
       this.cells[i][j].draw();
     }
   }
+
+  if (this.step < this.max_it) {
+    textSize(150);
+    this.texte_ = createElement('p', this.load_indicator);
+    this.texte_.position(this.WIDTH - 300, this.HEIGHT);
+    fill(60);
+  } else if (this.text >= this.max_it) {
+    this.texte_.remove();
+  }
+}
+
+board.prototype.update = function() {
+  this.genMaze();
 }
 
 board.prototype.wallBehaviors = function(Apos) {
@@ -44,16 +61,22 @@ board.prototype.wallBehaviors = function(Apos) {
 }
 
 board.prototype.genMaze = function() {
-  this.createRoute(createVector(1, Math.round(random((HEIGHT / SIZE) - 3) + 1)));
+  //loading indicator
+  this.max_it = Math.round(((this.WIDTH / this.s) * (this.HEIGHT / this.s)) / 3);
+  this.load_indicator = this.step + " / " + this.max_it;
+  this.texte_.remove();
+
   var cells_drawable = [0];
 
-  var max_it = ((this.WIDTH / this.s) * (this.HEIGHT / this.s)) / 3;
-  var it = 0;
-  while (true) {
+  if (this.step == 0) {
+    this.createRoute(createVector(1, Math.round(random((HEIGHT / SIZE) - 3) + 1)));
+  }
+
+  if (this.step < this.max_it) {
     cells_drawable = [];
     var temp = [];
-    //we look for cell drawable
 
+    //we look for cell drawable
     for (var i = 0; i < this.cells.length; i++) {
       for (var j = 0; j < this.cells[i].length; j++) {
         if (!this.cells[i][j].wall) {
@@ -82,10 +105,7 @@ board.prototype.genMaze = function() {
         var chosen = random(cells_drawable);
         this.createRoute(createVector(chosen.x, chosen.y));
       }
-
-      if (it >= max_it)
-        break;
-      it++;
+      this.step++;
   }
 }
 
@@ -126,7 +146,7 @@ board.prototype.createRoute = function(pos) {
     //end the road if there is no possibility, transform the possibility into road if there is only one, pick one if there is more than one
     if (goodP.length == 0)
     {
-      console.log("possibilité = 0");
+      //console.log("possibilité = 0");
       break;
 
     } else if (goodP.length > 1) {

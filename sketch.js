@@ -6,21 +6,24 @@ var inputs, buttons;
 var texte_ = "";
 var created_ = false;
 
+var grid;
+
 function setup() {
   createCanvas(WIDTH, HEIGHT);
 
+  texte_ = createElement('h3', 'Cells size (in pixels, >10 recommanded)');
+  texte_.position(0, 543);
+
+  //textAlign(CENTER);
+  textSize(18);
+
   input = createInput();
-  input.position(WIDTH/2 - input.width/2, 550);
+  input.position(texte_.size().width + 10, (texte_.size().height/2) + 553);
 
   button = createButton('Set');
-  button.position(input.x + input.width, 553);
+  button.position(input.x + input.width, (texte_.size().height/2) + 553);
   button.mousePressed(createLabirynth);
 
-  texte_ = createElement('h3', 'Cells size (in pixels, >10 recommanded)');
-  texte_.position(input.x , 543 - input.height);
-
-  textAlign(CENTER);
-  textSize(18);
 }
 
 function createLabirynth() {
@@ -28,11 +31,14 @@ function createLabirynth() {
   size_ = input.value();
   input.value('');
   SIZE = size_;
+  delete(window.grid);
   grid = new board(WIDTH, HEIGHT, SIZE);
   grid.genMaze();
 }
 
 function draw() {
-  if (created_)
+  if (created_) {
+    grid.update();
     grid.draw();
+  }
 }
