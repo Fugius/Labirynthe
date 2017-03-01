@@ -4,6 +4,7 @@ function board(width_, height_, size_) {
   this.HEIGHT = height_;
   this.s = size_;
 
+ console.log(Math.round(this.WIDTH / this.s));
   this.cells = new Array(Math.round(this.WIDTH / this.s));
 
   //generate cells
@@ -46,7 +47,7 @@ board.prototype.genMaze = function() {
   this.createRoute(createVector(1, Math.round(random((HEIGHT / SIZE) - 3) + 1)));
   var cells_drawable = [0];
 
-  var max_it = (this.WIDTH * this.HEIGHT) / (3 * this.s);
+  var max_it = ((this.WIDTH / this.s) * (this.HEIGHT / this.s)) / 3;
   var it = 0;
   while (true) {
     cells_drawable = [];
